@@ -1,0 +1,14 @@
+{
+  "name": "scratch",
+  "version": "1.0.0",
+  "main": "main.js",
+  "repository": "git@github.com:/jmarquis/scratch.git",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^1.7.8"
+  }
+}
