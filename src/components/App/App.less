@@ -1,6 +1,51 @@
-@import (inline) "~normalize.css/normalize.css";
-
 .App {
   width: 100vw;
   height: 100vh;
+  display: flex;
+
+  > nav {
+    flex: none;
+    width: 230px;
+    display: flex;
+    flex-flow: column nowrap;
+
+    > header {
+      flex: none;
+      height: 40px;
+      padding: 12px 16px 0;
+      display: flex;
+
+      > input {
+        flex: auto;
+      }
+    }
+
+    > ul {
+      list-style: none;
+      flex: auto;
+      overflow-y: auto;
+      margin: 0;
+      padding: 10px 0 0 0;
+
+      > li {
+        margin: 0;
+
+        > a {
+          display: block;
+          padding: 8px 26px 8px 16px;
+          outline: 1px solid #eee;
+
+          > p {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
+  > section {
+    flex: auto;
+    overflow-y: auto;
+    border-left: 1px solid #eee;
+  }
 }
