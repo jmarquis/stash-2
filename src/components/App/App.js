@@ -27,6 +27,7 @@ export default class App extends Component {
               type="text"
               placeholder="Search or add"
               ref={searchField => this.searchField = searchField}
+              onKeyDown={this.handleSearchKeyDown}
             />
           </header>
           <ul>
@@ -71,6 +72,10 @@ export default class App extends Component {
 
       </div>
     )
+  }
+
+  handleSearchKeyDown(event) {
+    if (event.key === "Escape") ipcRenderer.send("hide-window")
   }
 
 }
