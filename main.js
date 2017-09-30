@@ -3,7 +3,8 @@ const url = require("url")
 
 const { app, BrowserWindow, Tray, globalShortcut } = require("electron")
 
-const WINDOW_WIDTH = 500
+const WINDOW_WIDTH = 600
+const WINDOW_HEIGHT = 400
 
 let mainWindow, trayIcon
 
@@ -32,7 +33,7 @@ app.on("ready", () => {
 
   mainWindow = new BrowserWindow({
     width: WINDOW_WIDTH,
-    height: 400,
+    height: WINDOW_HEIGHT,
     resizable: false,
     frame: false,
     vibrancy: "light",
