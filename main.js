@@ -12,6 +12,20 @@ function resetBounds() {
   mainWindow.setPosition((bounds.x + (bounds.width / 2)) - (WINDOW_WIDTH / 2), bounds.y + bounds.height)
 }
 
+function showWindow() {
+  mainWindow.show()
+  trayIcon.setHighlightMode("always")
+}
+
+function hideWindow() {
+  mainWindow.hide()
+  trayIcon.setHighlightMode("selection")
+}
+
+function toggleWindow() {
+  mainWindow.isVisible() ? hideWindow() : showWindow()
+}
+
 app.on("ready", () => {
 
   if (process.platform === "darwin") app.dock.hide()
@@ -21,13 +35,14 @@ app.on("ready", () => {
     height: 400,
     resizable: false,
     frame: false,
-    transparent: false,
+    vibrancy: "light",
+    transparent: true,
     show: false
   })
 
   globalShortcut.register("CommandOrControl+Shift+\\", () => {
     resetBounds()
-    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+    toggleWindow()
   })
 
   if (process.env.NODE_ENV === "production") {
@@ -42,13 +57,12 @@ app.on("ready", () => {
 
   mainWindow.on("close", () => mainWindow = null)
 
-  // mainWindow.on("blur", () => mainWindow.hide())
+  // mainWindow.on("blur", () => hideWindow())
 
   trayIcon = new Tray(path.join(__dirname, "static/images/tray-icon.png"))
 
   trayIcon.on("click", (event, bounds) => {
-    console.log(bounds)
     resetBounds()
-    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+    toggleWindow()
   })
 })
