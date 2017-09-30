@@ -1,11 +1,16 @@
 const path = require("path")
 const url = require("url")
 
-const { app, BrowserWindow, Tray } = require("electron")
+const { app, BrowserWindow, Tray, globalShortcut } = require("electron")
 
 const WINDOW_WIDTH = 500
 
-let mainWindow
+let mainWindow, trayIcon
+
+function resetBounds() {
+  const bounds = trayIcon.getBounds()
+  mainWindow.setPosition((bounds.x + (bounds.width / 2)) - (WINDOW_WIDTH / 2), bounds.y + bounds.height)
+}
 
 app.on("ready", () => {
 
@@ -20,21 +25,30 @@ app.on("ready", () => {
     show: false
   })
 
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, "build/index.html"),
-    protocol: "file:",
-    slashes: true
-  }))
+  globalShortcut.register("CommandOrControl+Shift+\\", () => {
+    resetBounds()
+    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+  })
+
+  if (process.env.NODE_ENV === "production") {
+    mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, "build/index.html"),
+      protocol: "file:",
+      slashes: true
+    }))
+  } else {
+    mainWindow.loadURL("http://localhost:3000")
+  }
 
   mainWindow.on("close", () => mainWindow = null)
 
-  mainWindow.on("blur", () => mainWindow.hide())
+  // mainWindow.on("blur", () => mainWindow.hide())
 
-  const tray = new Tray(path.join(__dirname, "static/images/tray-icon.png"))
+  trayIcon = new Tray(path.join(__dirname, "static/images/tray-icon.png"))
 
-  tray.on("click", (event, bounds) => {
+  trayIcon.on("click", (event, bounds) => {
     console.log(bounds)
-    mainWindow.setPosition((bounds.x + (bounds.width / 2)) - (WINDOW_WIDTH / 2), bounds.y + bounds.height)
+    resetBounds()
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
   })
 })
