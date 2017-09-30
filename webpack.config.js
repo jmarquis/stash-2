@@ -7,6 +7,8 @@ module.exports = {
 
   devtool: "source-map",
 
+  target: "electron-renderer",
+
   entry: [
     "react-hot-loader/patch",
     path.join(src, "index.js"),

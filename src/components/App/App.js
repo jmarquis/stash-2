@@ -1,8 +1,16 @@
 import "./App.less"
 
 import React, { Component } from "react"
+import { ipcRenderer } from "electron"
 
 export default class App extends Component {
+
+  componentDidMount() {
+    ipcRenderer.on("focus-search", () => {
+      this.searchField.focus()
+      this.searchField.select()
+    })
+  }
 
   render() {
     return (
@@ -10,7 +18,11 @@ export default class App extends Component {
 
         <nav>
           <header>
-            <input type="text" placeholder="Search or add" />
+            <input
+              type="text"
+              placeholder="Search or add"
+              ref={searchField => this.searchField = searchField}
+            />
           </header>
           <ul>
             <li>

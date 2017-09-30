@@ -16,6 +16,7 @@ function resetBounds() {
 function showWindow() {
   mainWindow.show()
   trayIcon.setHighlightMode("always")
+  mainWindow.webContents.send("focus-search")
 }
 
 function hideWindow() {
@@ -29,7 +30,7 @@ function toggleWindow() {
 
 app.on("ready", () => {
 
-  if (process.platform === "darwin") app.dock.hide()
+  // if (process.platform === "darwin") app.dock.hide()
 
   mainWindow = new BrowserWindow({
     title: "Scratch",
@@ -47,7 +48,7 @@ app.on("ready", () => {
     toggleWindow()
   })
 
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "electron") {
     mainWindow.loadURL(url.format({
       pathname: path.join(__dirname, "build/index.html"),
       protocol: "file:",
