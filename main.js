@@ -32,6 +32,7 @@ app.on("ready", () => {
   if (process.platform === "darwin") app.dock.hide()
 
   mainWindow = new BrowserWindow({
+    title: "Scratch",
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
     resizable: false,
