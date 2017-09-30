@@ -10,7 +10,7 @@ export default class App extends Component {
 
         <nav>
           <header>
-            <input type="text" />
+            <input type="text" placeholder="Search or add" />
           </header>
           <ul>
             <li>
