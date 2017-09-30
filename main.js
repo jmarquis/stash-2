@@ -1,16 +1,24 @@
 const path = require("path")
 const url = require("url")
 
-const electron = require("electron")
+const { app, BrowserWindow, Tray } = require("electron")
 
-const app = electron.app
-const BrowserWindow = electron.BrowserWindow
+const WINDOW_WIDTH = 500
 
 let mainWindow
 
-function createWindow() {
+app.on("ready", () => {
 
-  mainWindow = new BrowserWindow({ width: 800, height: 600 })
+  if (process.platform === "darwin") app.dock.hide()
+
+  mainWindow = new BrowserWindow({
+    width: WINDOW_WIDTH,
+    height: 400,
+    resizable: false,
+    frame: false,
+    transparent: false,
+    show: false
+  })
 
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, "build/index.html"),
@@ -18,24 +26,15 @@ function createWindow() {
     slashes: true
   }))
 
-  mainWindow.on("closed", () => mainWindow = null)
+  mainWindow.on("close", () => mainWindow = null)
 
-}
+  mainWindow.on("blur", () => mainWindow.hide())
 
-app.on("ready", createWindow)
+  const tray = new Tray(path.join(__dirname, "static/images/tray-icon.png"))
 
-app.on("window-all-closed", () => {
-
-  if (process.platform !== "darwin") {
-    app.quit()
-  }
-
-})
-
-app.on("activate", () => {
-
-  if (mainWindow === null) {
-    createWindow()
-  }
-
+  tray.on("click", (event, bounds) => {
+    console.log(bounds)
+    mainWindow.setPosition((bounds.x + (bounds.width / 2)) - (WINDOW_WIDTH / 2), bounds.y + bounds.height)
+    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+  })
 })

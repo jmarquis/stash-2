@@ -7,11 +7,13 @@
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --content-base build/ --port 3000 --hot --history-api-fallback",
+    "build": "webpack",
     "run-app": "electron ."
   },
   "dependencies": {
     "babel-preset-react": "^6.24.1",
     "electron": "^1.7.8",
+    "normalize.css": "^7.0.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",

@@ -1,10 +1,14 @@
+import "./App.less"
+
 import React, { Component } from "react"
 
 export default class App extends Component {
 
   render() {
     return (
-      <div>hey!</div>
+      <div className="App">
+        hey!
+      </div>
     )
   }
 
