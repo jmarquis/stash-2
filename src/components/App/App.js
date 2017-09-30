@@ -2,14 +2,19 @@ import "./App.less"
 
 import React, { Component } from "react"
 import { ipcRenderer } from "electron"
+import { bind } from "mousetrap"
 
 export default class App extends Component {
 
   componentDidMount() {
+
     ipcRenderer.on("focus-search", () => {
       this.searchField.focus()
       this.searchField.select()
     })
+
+    bind("esc", () => ipcRenderer.send("hide-window"))
+
   }
 
   render() {

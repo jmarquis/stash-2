@@ -1,7 +1,7 @@
 const path = require("path")
 const url = require("url")
 
-const { app, BrowserWindow, Tray, globalShortcut } = require("electron")
+const { app, BrowserWindow, Tray, globalShortcut, ipcMain } = require("electron")
 
 const WINDOW_WIDTH = 600
 const WINDOW_HEIGHT = 400
@@ -47,6 +47,8 @@ app.on("ready", () => {
     resetBounds()
     toggleWindow()
   })
+
+  ipcMain.on("hide-window", hideWindow)
 
   if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "electron") {
     mainWindow.loadURL(url.format({
