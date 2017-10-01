@@ -1,8 +1,8 @@
-export function user(state = null, action) {
+export function notes(state = {}, action) {
   switch (action.type) {
 
     default:
       return state
-      
+
   }
 }
