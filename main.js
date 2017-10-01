@@ -55,7 +55,7 @@ app.on("ready", () => {
 
   ipcMain.on("hide-window", hideWindow)
 
-  if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "electron") {
+  if (process.env.NODE_ENV === "production") {
     mainWindow.loadURL(url.format({
       pathname: path.join(__dirname, "build/index.html"),
       protocol: "file:",
