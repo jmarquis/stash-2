@@ -9,6 +9,11 @@ module.exports = {
 
   target: "electron-renderer",
 
+  externals: {
+    "electron-store": "require('electron-store')",
+    "conf": "require('conf')"
+  },
+
   entry: [
     "react-hot-loader/patch",
     path.join(src, "index.js"),

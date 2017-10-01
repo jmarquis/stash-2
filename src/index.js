@@ -9,6 +9,8 @@ import { createStore, combineReducers, applyMiddleware } from "redux"
 import thunk from "redux-thunk"
 import { createLogger } from "redux-logger"
 
+import localData from "etc/localData"
+
 import App from "components/App"
 
 import * as reducers from "reducers"
