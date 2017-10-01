@@ -35,7 +35,7 @@ function toggleWindow() {
 
 app.on("ready", () => {
 
-  // if (process.platform === "darwin") app.dock.hide()
+  if (process.platform === "darwin") app.dock.hide()
 
   mainWindow = new BrowserWindow({
     title: "Scratch",

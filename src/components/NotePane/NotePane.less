@@ -2,19 +2,29 @@
 
 .NotePane {
   overflow-y: auto;
-  padding: 14px 16px 16px;
   background-color: @white;
+  display: flex;
 
-  > p {
+  > .DraftEditor-root {
+    flex: auto;
+    display: flex;
 
-    &:first-child {
-      font-size: 20px;
-      font-weight: 600;
-      line-height: 1.3;
-    }
+    > .DraftEditor-editorContainer {
+      flex: auto;
+      display: flex;
 
-    & + p {
-      margin-top: 8px;
+      > .public-DraftEditor-content {
+        flex: auto;
+        padding: 14px 16px 16px;
+        line-height: 1.5;
+
+        > div > div:first-child {
+          font-size: 20px;
+          font-weight: 600;
+          line-height: 1.3;
+          margin-bottom: 8px;
+        }
+      }
     }
   }
 }
