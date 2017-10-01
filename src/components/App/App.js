@@ -1,10 +1,16 @@
 import "./App.less"
 
 import React, { Component } from "react"
+import PropTypes from "prop-types"
 import { ipcRenderer } from "electron"
 import { bind } from "mousetrap"
+import { Route, Switch, Redirect } from "react-router-dom"
 
 export default class App extends Component {
+
+  static propTypes = {
+    user: PropTypes.object
+  }
 
   componentDidMount() {
 
@@ -18,6 +24,26 @@ export default class App extends Component {
   }
 
   render() {
+    const { user } = this.props
+    return (
+      <div className="App">
+        {(() => {
+          if (user) {
+            return (
+              <Switch>
+                <Route exact path="/" render={() => <div><Redirect to="/123" /></div>} />
+                <Route path="/:spaceId" render={() => <div>space</div>} />
+              </Switch>
+            )
+          } else if (user === false) {
+            return <div>auth</div>
+          } else {
+            return <div>loading</div>
+          }
+        })()}
+      </div>
+    )
+
     return (
       <div className="App">
 
