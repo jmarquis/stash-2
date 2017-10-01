@@ -8,6 +8,9 @@ const WINDOW_HEIGHT = 400
 
 let mainWindow, trayIcon
 
+const trayIconImage = path.join(__dirname, "static/images/tray-icon.png")
+const trayIconImagePressed = path.join(__dirname, "static/images/tray-icon-selected.png")
+
 function resetBounds() {
   const bounds = trayIcon.getBounds()
   mainWindow.setPosition((bounds.x + (bounds.width / 2)) - (WINDOW_WIDTH / 2), bounds.y + bounds.height)
@@ -16,12 +19,14 @@ function resetBounds() {
 function showWindow() {
   mainWindow.show()
   trayIcon.setHighlightMode("always")
+  trayIcon.setImage(trayIconImagePressed)
   mainWindow.webContents.send("focus-search")
 }
 
 function hideWindow() {
   mainWindow.hide()
   trayIcon.setHighlightMode("selection")
+  trayIcon.setImage(trayIconImage)
 }
 
 function toggleWindow() {
@@ -65,6 +70,8 @@ app.on("ready", () => {
   // mainWindow.on("blur", () => hideWindow())
 
   trayIcon = new Tray(path.join(__dirname, "static/images/tray-icon.png"))
+
+  trayIcon.setPressedImage(path.join(__dirname, "static/images/tray-icon-selected.png"))
 
   trayIcon.on("click", (event, bounds) => {
     resetBounds()
