@@ -1,7 +1,11 @@
-export function updateNote(noteId, noteContent) {
+function updateNote(noteId, noteData) {
   return {
     type: "UPDATE_NOTE",
     noteId,
-    noteContent
+    noteData
   }
+}
+
+export function updateContentState(noteId, contentState) {
+  return updateNote(noteId, { contentState })
 }
