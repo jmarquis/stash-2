@@ -25,7 +25,14 @@ if (process.env.NODE_ENV !== "production") {
   }))
 }
 
-const store = createStore(combineReducers(reducers), applyMiddleware(...middleware))
+const store = createStore(
+  combineReducers(reducers),
+  {
+    spaces: localData.get("spaces"),
+    notes: localData.get("notes")
+  },
+  applyMiddleware(...middleware)
+)
 
 const renderApp = AppComponent => render(
   <AppContainer>

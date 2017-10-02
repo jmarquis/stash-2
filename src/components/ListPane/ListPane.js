@@ -1,9 +1,24 @@
 import "./ListPane.less"
 
 import React, { Component } from "react"
+import PropTypes from "prop-types"
 import { ipcRenderer } from "electron"
+import { connect } from "react-redux"
+import { withRouter } from "react-router"
+import { convertFromRaw } from "draft-js"
 
+@withRouter
+@connect((state, props) => {
+  let { notes } = state
+  const { match: { params: { spaceId } } } = props
+  notes = Object.keys(notes).filter(noteId => notes[noteId].spaceId === spaceId).map(noteId => ({ id: noteId, ...notes[noteId] }))
+  return { notes }
+})
 export default class ListPane extends Component {
+
+  static propTypes = {
+    notes: PropTypes.object
+  }
 
   componentDidMount() {
     ipcRenderer.on("focus-search", () => {
@@ -13,6 +28,7 @@ export default class ListPane extends Component {
   }
 
   render() {
+    const { notes } = this.props
     return (
       <nav className="ListPane">
 
@@ -26,36 +42,15 @@ export default class ListPane extends Component {
         </header>
 
         <ul>
-          <li>
-            <a>
-              <p>Upcoming trips</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Haec et tu ita posuisti, et verba...</p>
-            </a>
-          </li>
-          <li>
-            <a>
-              <p>Upcoming trips and other similar things</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Haec et tu ita posuisti, et verba...</p>
-            </a>
-          </li>
-          <li>
-            <a>
-              <p>Upcoming trips</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Haec et tu ita posuisti, et verba...</p>
-            </a>
-          </li>
-          <li>
-            <a>
-              <p>Upcoming trips</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Haec et tu ita posuisti, et verba...</p>
-            </a>
-          </li>
-          <li>
-            <a>
-              <p>Upcoming trips</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Haec et tu ita posuisti, et verba...</p>
-            </a>
-          </li>
+          {
+            notes.map(note =>
+              <li key={note.id}>
+                <a>
+                  {convertFromRaw(JSON.parse(note.contentState)).getPlainText()}
+                </a>
+              </li>
+            )
+          }
         </ul>
 
       </nav>
