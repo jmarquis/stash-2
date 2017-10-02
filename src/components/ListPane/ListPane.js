@@ -48,7 +48,7 @@ export default class ListPane extends Component {
             notes.map(note =>
               <li key={note.id}>
                 <NavLink to={`${match.url}/${note.id}`}>
-                  {convertFromRaw(JSON.parse(note.contentState)).getPlainText()}
+                  {convertFromRaw(JSON.parse(note.contentState)).getPlainText().split("\n").slice(0, 2).map((line, index) => <p key={index}>{ index === 1 ? `${line.substr(0, 100)}...` : line }</p>)}
                 </NavLink>
               </li>
             )
