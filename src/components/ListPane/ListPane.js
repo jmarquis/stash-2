@@ -53,13 +53,16 @@ export default class ListPane extends Component {
 
         <ul>
           {
-            notes.map(note =>
-              <li key={note.id}>
-                <NavLink to={`${match.url}/${note.id}`}>
-                  {convertFromRaw(JSON.parse(note.contentState)).getPlainText().split("\n").slice(0, 2).map((line, index) => <p key={index}>{ index === 1 ? `${line.substr(0, 100)}...` : line }</p>)}
-                </NavLink>
-              </li>
-            )
+            notes.map(note => {
+              const text = convertFromRaw(JSON.parse(note.contentState)).getPlainText()
+              return (
+                <li key={note.id}>
+                  <NavLink to={`${match.url}/${note.id}`}>
+                    { text ? text.split("\n").slice(0, 2).map((line, index) => <p key={index}>{ index === 1 && line.length > 80 ? `${line.substr(0, 80)}...` : line }</p>) : <p>New note</p> }
+                  </NavLink>
+                </li>
+              )
+            })
           }
         </ul>
 
