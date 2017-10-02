@@ -5,6 +5,7 @@ import PropTypes from "prop-types"
 import { ipcRenderer } from "electron"
 import { connect } from "react-redux"
 import { withRouter } from "react-router"
+import { NavLink } from "react-router-dom"
 import { convertFromRaw } from "draft-js"
 
 @withRouter
@@ -17,7 +18,8 @@ import { convertFromRaw } from "draft-js"
 export default class ListPane extends Component {
 
   static propTypes = {
-    notes: PropTypes.object
+    notes: PropTypes.object,
+    match: PropTypes.object
   }
 
   componentDidMount() {
@@ -28,7 +30,7 @@ export default class ListPane extends Component {
   }
 
   render() {
-    const { notes } = this.props
+    const { match, notes } = this.props
     return (
       <nav className="ListPane">
 
@@ -45,9 +47,9 @@ export default class ListPane extends Component {
           {
             notes.map(note =>
               <li key={note.id}>
-                <a>
+                <NavLink to={`${match.url}/${note.id}`}>
                   {convertFromRaw(JSON.parse(note.contentState)).getPlainText()}
-                </a>
+                </NavLink>
               </li>
             )
           }
