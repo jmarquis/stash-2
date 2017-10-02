@@ -7,19 +7,25 @@ import { connect } from "react-redux"
 import { withRouter } from "react-router"
 import { NavLink } from "react-router-dom"
 import { convertFromRaw } from "draft-js"
+import autobind from "autobind-decorator"
+
+import { updateQuery } from "actions"
 
 @withRouter
 @connect((state, props) => {
-  let { notes } = state
+  let { notes, query } = state
   const { match: { params: { spaceId } } } = props
-  notes = Object.keys(notes).filter(noteId => notes[noteId].spaceId === spaceId).map(noteId => ({ id: noteId, ...notes[noteId] }))
-  return { notes }
+  notes = Object.keys(notes).filter(noteId => notes[noteId].spaceId === spaceId && convertFromRaw(JSON.parse(notes[noteId].contentState)).getPlainText().toLowerCase().includes(query.toLowerCase())).map(noteId => ({ id: noteId, ...notes[noteId] }))
+  return { notes, query }
 })
+@autobind
 export default class ListPane extends Component {
 
   static propTypes = {
+    dispatch: PropTypes.func,
     notes: PropTypes.object,
-    match: PropTypes.object
+    match: PropTypes.object,
+    query: PropTypes.string
   }
 
   componentDidMount() {
@@ -30,7 +36,7 @@ export default class ListPane extends Component {
   }
 
   render() {
-    const { match, notes } = this.props
+    const { match, notes, query } = this.props
     return (
       <nav className="ListPane">
 
@@ -39,7 +45,9 @@ export default class ListPane extends Component {
             type="text"
             placeholder="Search or add"
             ref={searchField => this.searchField = searchField}
-            onKeyDown={this.handleSearchKeyDown}
+            onKeyDown={this.handleQueryKeyDown}
+            onChange={this.handleQueryChange}
+            value={query}
           />
         </header>
 
@@ -59,8 +67,13 @@ export default class ListPane extends Component {
     )
   }
 
-  handleSearchKeyDown(event) {
+  handleQueryKeyDown(event) {
     if (event.key === "Escape") ipcRenderer.send("hide-window")
+  }
+
+  handleQueryChange(event) {
+    const { dispatch } = this.props
+    dispatch(updateQuery(event.target.value))
   }
 
 }

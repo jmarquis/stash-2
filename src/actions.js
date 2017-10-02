@@ -20,3 +20,10 @@ export function updateContentState(noteId, contentState) {
   throttledPersistContentState(noteId, contentState)
   return updateNote(noteId, { contentState })
 }
+
+export function updateQuery(query) {
+  return {
+    type: "UPDATE_QUERY",
+    query
+  }
+}
