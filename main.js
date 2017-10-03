@@ -6,18 +6,20 @@ const { app, BrowserWindow, Tray, globalShortcut, ipcMain } = require("electron"
 const WINDOW_WIDTH = 600
 const WINDOW_HEIGHT = 400
 
-let mainWindow, trayIcon
+let mainWindow, arrowWindow, trayIcon
 
 const trayIconImage = path.join(__dirname, "static/images/tray-icon.png")
 const trayIconImagePressed = path.join(__dirname, "static/images/tray-icon-selected.png")
 
 function resetBounds() {
   const bounds = trayIcon.getBounds()
-  mainWindow.setPosition((bounds.x + (bounds.width / 2)) - (WINDOW_WIDTH / 2), bounds.y + bounds.height)
+  mainWindow.setPosition((bounds.x + (bounds.width / 2)) - (WINDOW_WIDTH / 2), bounds.y + bounds.height + 16)
+  arrowWindow.setPosition((bounds.x + (bounds.width / 2)) - 16, bounds.y + bounds.height)
 }
 
 function showWindow() {
   mainWindow.show()
+  arrowWindow.show()
   trayIcon.setHighlightMode("always")
   trayIcon.setImage(trayIconImagePressed)
   mainWindow.webContents.send("focus-search")
@@ -25,6 +27,7 @@ function showWindow() {
 
 function hideWindow() {
   mainWindow.hide()
+  arrowWindow.hide()
   trayIcon.setHighlightMode("selection")
   trayIcon.setImage(trayIconImage)
 }
@@ -48,12 +51,19 @@ app.on("ready", () => {
     show: false
   })
 
-  globalShortcut.register("CommandOrControl+Shift+\\", () => {
-    resetBounds()
-    toggleWindow()
+  arrowWindow = new BrowserWindow({
+    parent: mainWindow,
+    title: "",
+    width: 320,
+    height: 160,
+    resizable: false,
+    frame: false,
+    transparent: true,
+    show: false,
+    hasShadow: false
   })
 
-  ipcMain.on("hide-window", hideWindow)
+  arrowWindow.loadURL("http://localhost:3000/arrow.html")
 
   if (process.env.NODE_ENV === "production") {
     mainWindow.loadURL(url.format({
@@ -65,6 +75,13 @@ app.on("ready", () => {
     mainWindow.loadURL("http://localhost:3000")
   }
 
+  globalShortcut.register("CommandOrControl+Shift+\\", () => {
+    resetBounds()
+    toggleWindow()
+  })
+
+  ipcMain.on("hide-window", hideWindow)
+
   mainWindow.on("close", () => mainWindow = null)
 
   // mainWindow.on("blur", () => hideWindow())
@@ -73,7 +90,7 @@ app.on("ready", () => {
 
   trayIcon.setPressedImage(path.join(__dirname, "static/images/tray-icon-selected.png"))
 
-  trayIcon.on("click", (event, bounds) => {
+  trayIcon.on("click", () => {
     resetBounds()
     toggleWindow()
   })

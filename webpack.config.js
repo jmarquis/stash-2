@@ -17,7 +17,8 @@ module.exports = {
   entry: [
     "react-hot-loader/patch",
     path.join(src, "index.js"),
-    path.join(src, "index.html")
+    path.join(src, "index.html"),
+    path.join(src, "arrow.html")
   ],
 
   resolve: {
