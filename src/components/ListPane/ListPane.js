@@ -8,6 +8,7 @@ import { withRouter } from "react-router"
 import { NavLink } from "react-router-dom"
 import { convertFromRaw } from "draft-js"
 import autobind from "autobind-decorator"
+import moment from "moment"
 
 import { updateQuery } from "actions"
 
@@ -15,7 +16,16 @@ import { updateQuery } from "actions"
 @connect((state, props) => {
   let { notes, query } = state
   const { match: { params: { spaceId } } } = props
-  notes = Object.keys(notes).filter(noteId => notes[noteId].spaceId === spaceId && convertFromRaw(JSON.parse(notes[noteId].contentState)).getPlainText().toLowerCase().includes(query.toLowerCase())).map(noteId => ({ id: noteId, ...notes[noteId] }))
+  notes = Object.keys(notes)
+    .filter(noteId => notes[noteId].spaceId === spaceId && convertFromRaw(JSON.parse(notes[noteId].contentState)).getPlainText().toLowerCase().includes(query.toLowerCase()))
+    .map(noteId => ({ id: noteId, ...notes[noteId] }))
+    .sort((noteA, noteB) => {
+      const noteALastModified = moment(noteA.lastModified)
+      const noteBLastModified = moment(noteB.lastModified)
+      if (noteBLastModified.isBefore(noteALastModified)) return -1
+      else if (noteALastModified.isBefore(noteBLastModified)) return 1
+      else return 0
+    })
   return { notes, query }
 })
 @autobind

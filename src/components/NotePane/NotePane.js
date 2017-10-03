@@ -50,7 +50,9 @@ export default class NotePane extends Component {
   handleChange(editorState) {
     const { dispatch, note } = this.props
     this.setState({ editorState })
-    dispatch(updateContentState(note.id, editorState.getCurrentContent()))
+    if (editorState.getCurrentContent() !== this.state.editorState.getCurrentContent()) {
+      dispatch(updateContentState(note.id, editorState.getCurrentContent()))
+    }
   }
 
   handleClick() {
