@@ -27,12 +27,13 @@ export default class Space extends Component {
 
 
 
-// NEXT: electron-store
-// persist stuff locally
-// load initial state into redux from electron-store on launch
-// wire up routes for notes, etc
-// wire up action for creating new notes via Enter key
-// hotkey for new notes (command N)
-// throttle saves to electron-store while typing
+// TODO: fix backspace/selection state weirdness
+// TODO: fix app only showing up on one desktop
+// TODO: sort notes by most frequently modified
+// TODO: support creating a note from the search box
+// TODO: keyboard bindings for navigating list & focusing note
+// TODO: figure out window styling
+// TODO: figure out list pane preview truncate length or something
+// TODO: deleting a note? trash view?
 //
 // LATER: firebase
