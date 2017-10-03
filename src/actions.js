@@ -14,14 +14,14 @@ function updateNote(noteId, noteData) {
 }
 
 function persistContentState(noteId, contentState) {
-  localData.set(`notes.${noteId}.contentState`, contentState)
+  localData.set(`notes.${noteId}.contentState`, JSON.stringify(convertToRaw(contentState)))
 }
 
 const throttledPersistContentState = throttle(persistContentState, 500)
 
-export function updateContentState(noteId, contentState) {
-  throttledPersistContentState(noteId, contentState)
-  return updateNote(noteId, { contentState })
+export function updateEditorState(noteId, editorState) {
+  throttledPersistContentState(noteId, editorState.getCurrentContent())
+  return updateNote(noteId, { editorState })
 }
 
 export function updateQuery(query) {

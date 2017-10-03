@@ -2,11 +2,11 @@ import "./NotePane.less"
 
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-import { Editor, EditorState, convertFromRaw, convertToRaw } from "draft-js"
+import { Editor, EditorState, convertFromRaw } from "draft-js"
 import autobind from "autobind-decorator"
 import { connect } from "react-redux"
 
-import { updateContentState } from "actions"
+import { updateEditorState } from "actions"
 
 @connect((state, props) => {
   const { notes } = state
@@ -21,15 +21,13 @@ export default class NotePane extends Component {
     note: PropTypes.object
   }
 
-  state = {
-    editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.note.contentState)))
+  componentDidMount() {
+    this.editor.focus()
   }
 
-  componentWillUpdate(nextProps) {
-    if (nextProps.note.contentState !== this.props.note.contentState) {
-      this.setState({
-        editorState: EditorState.push(this.state.editorState, convertFromRaw(JSON.parse(nextProps.note.contentState)))
-      })
+  componentDidUpdate(prevProps) {
+    if (prevProps.note.id !== this.props.note.id) {
+      this.editor.focus()
     }
   }
 
@@ -37,16 +35,23 @@ export default class NotePane extends Component {
     const { note } = this.props
     if (!note) return null
     return (
-      <section className="NotePane">
-        <Editor editorState={this.state.editorState} onChange={this.onChange} />
+      <section className="NotePane" onClick={this.handleClick}>
+        <Editor
+          editorState={note.editorState || EditorState.createWithContent(convertFromRaw(JSON.parse(note.contentState)))}
+          onChange={this.handleChange}
+          ref={editor => this.editor = editor}
+        />
       </section>
     )
   }
 
-  onChange(editorState) {
+  handleChange(editorState) {
     const { dispatch, note } = this.props
-    this.setState({ editorState })
-    dispatch(updateContentState(note.id, JSON.stringify(convertToRaw(editorState.getCurrentContent()))))
+    dispatch(updateEditorState(note.id, editorState))
+  }
+
+  handleClick() {
+    this.editor.focus()
   }
 
 }
