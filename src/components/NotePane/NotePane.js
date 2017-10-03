@@ -25,6 +25,14 @@ export default class NotePane extends Component {
     editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.note.contentState)))
   }
 
+  componentWillUpdate(nextProps) {
+    if (nextProps.note.id !== this.props.note.id) {
+      this.setState({
+        editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(nextProps.note.contentState)))
+      })
+    }
+  }
+
   render() {
     const { note } = this.props
     if (!note) return null
