@@ -13,15 +13,20 @@ function updateNote(noteId, noteData) {
   }
 }
 
-function persistContentState(noteId, contentState) {
-  localData.set(`notes.${noteId}.contentState`, JSON.stringify(convertToRaw(contentState)))
+function persistContentState(noteId, noteData) {
+  localData.set(`notes.${noteId}.contentState`, noteData.contentState)
+  localData.set(`notes.${noteId}.lastModified`, noteData.lastModified)
 }
 
 const throttledPersistContentState = throttle(persistContentState, 500)
 
-export function updateEditorState(noteId, editorState) {
-  throttledPersistContentState(noteId, editorState.getCurrentContent())
-  return updateNote(noteId, { editorState })
+export function updateContentState(noteId, contentState) {
+  const noteData = {
+    contentState: JSON.stringify(convertToRaw(contentState)),
+    lastModified: moment()
+  }
+  throttledPersistContentState(noteId, noteData)
+  return updateNote(noteId, noteData)
 }
 
 export function updateQuery(query) {
@@ -35,7 +40,7 @@ export function createNote(spaceId) {
   const noteId = uuid()
   const noteData = {
     spaceId,
-    lastUpdated: moment(),
+    lastModified: moment(),
     contentState: JSON.stringify(convertToRaw(ContentState.createFromText("")))
   }
   localData.set(`notes.${noteId}`, noteData)

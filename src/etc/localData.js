@@ -17,7 +17,7 @@ if (!spaces || !notes) {
     notes: {
       [uuid()]: {
         spaceId,
-        lastUpdated: moment(),
+        lastModified: moment(),
         contentState: JSON.stringify(convertToRaw(ContentState.createFromText("Welcome to Backslash!")))
       }
     }

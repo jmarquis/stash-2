@@ -6,7 +6,7 @@ import { Editor, EditorState, convertFromRaw } from "draft-js"
 import autobind from "autobind-decorator"
 import { connect } from "react-redux"
 
-import { updateEditorState } from "actions"
+import { updateContentState } from "actions"
 
 @connect((state, props) => {
   const { notes } = state
@@ -21,14 +21,8 @@ export default class NotePane extends Component {
     note: PropTypes.object
   }
 
-  componentDidMount() {
-    this.editor.focus()
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.note.id !== this.props.note.id) {
-      this.editor.focus()
-    }
+  state = {
+    editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.note.contentState)))
   }
 
   render() {
@@ -37,7 +31,7 @@ export default class NotePane extends Component {
     return (
       <section className="NotePane" onClick={this.handleClick}>
         <Editor
-          editorState={note.editorState || EditorState.createWithContent(convertFromRaw(JSON.parse(note.contentState)))}
+          editorState={this.state.editorState}
           onChange={this.handleChange}
           ref={editor => this.editor = editor}
         />
@@ -47,7 +41,8 @@ export default class NotePane extends Component {
 
   handleChange(editorState) {
     const { dispatch, note } = this.props
-    dispatch(updateEditorState(note.id, editorState))
+    this.setState({ editorState })
+    dispatch(updateContentState(note.id, editorState.getCurrentContent()))
   }
 
   handleClick() {
