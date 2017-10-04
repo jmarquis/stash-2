@@ -32,8 +32,10 @@ export default class App extends Component {
     const { dispatch, defaultSpaceId } = this.props
 
     bind("esc", () => ipcRenderer.send("hide-window"))
-    bind("command+n", () => dispatch(createNote(defaultSpaceId)))
+    bind("command+n", () => dispatch(createNote(defaultSpaceId))) // TODO: focus the new note
     bind("command+f", () => globalEmitter.emit("focus-search"))
+
+    ipcRenderer.on("create-note", () => dispatch(createNote(defaultSpaceId))) // TODO: focus the new note
 
   }
 

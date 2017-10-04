@@ -17,12 +17,12 @@ function resetBounds() {
   arrowWindow.setPosition((bounds.x + (bounds.width / 2)) - 16, bounds.y + bounds.height)
 }
 
-function showWindow() {
+function showWindow(focusSearch = true) {
   mainWindow.show()
   arrowWindow.show()
   trayIcon.setHighlightMode("always")
   trayIcon.setImage(trayIconImagePressed)
-  mainWindow.webContents.send("focus-search")
+  if (focusSearch) mainWindow.webContents.send("focus-search")
   positionTimer = setInterval(resetBounds, 100)
 }
 
@@ -36,6 +36,10 @@ function hideWindow() {
 
 function toggleWindow() {
   mainWindow.isVisible() ? hideWindow() : showWindow()
+}
+
+function createNote() {
+  mainWindow.webContents.send("create-note")
 }
 
 app.on("ready", () => {
@@ -81,6 +85,12 @@ app.on("ready", () => {
   globalShortcut.register("CommandOrControl+Shift+\\", () => {
     resetBounds()
     toggleWindow()
+  })
+
+  globalShortcut.register("CommandOrControl+Alt+Shift+\\", () => {
+    resetBounds()
+    toggleWindow(false)
+    createNote()
   })
 
   ipcMain.on("hide-window", hideWindow)
