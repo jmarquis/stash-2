@@ -87,7 +87,7 @@ export default class ListPane extends Component {
           />
         </header>
 
-        <ul>
+        <ul onKeyDown={this.handleQueryKeyDown} ref={list => this.list = list}>
           {
             notes.map(note => {
               const text = convertFromRaw(JSON.parse(note.contentState)).getPlainText()
@@ -134,6 +134,9 @@ export default class ListPane extends Component {
       const index = notes.findIndex(note => note.id === noteId)
       if (notes[index + offset]) {
         dispatch(push(`/${spaceId}/${notes[index + offset].id}`))
+        setTimeout(() => {
+          this.list.querySelector(".active").scrollIntoViewIfNeeded()
+        }, 100)
       }
     }
   }

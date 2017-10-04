@@ -19,6 +19,10 @@
       font: 14px "open-sans", sans-serif;
       padding: 0 8px 2px;
 
+      &:hover {
+        border-color: @aluminum;
+      }
+
       &:focus {
         background: @white;
         border-color: @azure;
@@ -31,7 +35,7 @@
     flex: auto;
     overflow-y: auto;
     margin: 0;
-    padding: 10px 0 0 0;
+    padding: 10px 0;
     position: relative;
 
     &::before {
@@ -55,7 +59,8 @@
         text-decoration: none;
 
         &:hover {
-          background-color: @cumulus;
+          // background-color: @cumulus;
+          color: #000;
         }
 
         &.active {
