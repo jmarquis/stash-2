@@ -6,7 +6,7 @@ const { app, BrowserWindow, Tray, globalShortcut, ipcMain } = require("electron"
 const WINDOW_WIDTH = 600
 const WINDOW_HEIGHT = 400
 
-let mainWindow, arrowWindow, trayIcon
+let mainWindow, arrowWindow, trayIcon, positionTimer
 
 const trayIconImage = path.join(__dirname, "static/images/tray-icon.png")
 const trayIconImagePressed = path.join(__dirname, "static/images/tray-icon-selected.png")
@@ -23,6 +23,7 @@ function showWindow() {
   trayIcon.setHighlightMode("always")
   trayIcon.setImage(trayIconImagePressed)
   mainWindow.webContents.send("focus-search")
+  positionTimer = setInterval(resetBounds, 100)
 }
 
 function hideWindow() {
@@ -30,6 +31,7 @@ function hideWindow() {
   arrowWindow.hide()
   trayIcon.setHighlightMode("selection")
   trayIcon.setImage(trayIconImage)
+  clearInterval(positionTimer)
 }
 
 function toggleWindow() {
