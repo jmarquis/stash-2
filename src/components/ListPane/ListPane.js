@@ -49,6 +49,11 @@ export default class ListPane extends Component {
       this.searchField.select()
     })
 
+    globalEmitter.on("focus-search", () => {
+      this.searchField.focus()
+      this.searchField.select()
+    })
+
     if (!noteId) {
       dispatch(push(`/${spaceId}/${notes[0].id}`))
     }

@@ -8,6 +8,7 @@ import { Route, Switch, Redirect } from "react-router-dom"
 import { connect } from "react-redux"
 import { withRouter } from "react-router"
 
+import globalEmitter from "etc/globalEmitter"
 import { createNote } from "actions"
 
 import Space from "components/Space"
@@ -32,6 +33,7 @@ export default class App extends Component {
 
     bind("esc", () => ipcRenderer.send("hide-window"))
     bind("command+n", () => dispatch(createNote(defaultSpaceId)))
+    bind("command+f", () => globalEmitter.emit("focus-search"))
 
   }
 
