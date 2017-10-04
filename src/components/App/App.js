@@ -32,7 +32,7 @@ export default class App extends Component {
 
     bind("esc", () => ipcRenderer.send("hide-window"))
     bind("command+n", () => dispatch(createNote(defaultSpaceId)))
-    
+
   }
 
   render() {
@@ -41,7 +41,7 @@ export default class App extends Component {
       <div className="App">
         <Switch>
           <Route exact path="/" render={() => <Redirect to={`/${defaultSpaceId}`} />} />
-          <Route path="/:spaceId" component={Space} />
+          <Route path="/:spaceId/:noteId?" component={Space} />
         </Switch>
       </div>
     )

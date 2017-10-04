@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom"
 import { convertFromRaw } from "draft-js"
 import autobind from "autobind-decorator"
 import moment from "moment"
+import { push } from "react-router-redux"
 
 import { updateQuery } from "actions"
 
@@ -39,14 +40,26 @@ export default class ListPane extends Component {
   }
 
   componentDidMount() {
+
+    const { dispatch, notes, match: { params: { spaceId, noteId } } } = this.props
+
     ipcRenderer.on("focus-search", () => {
       this.searchField.focus()
       this.searchField.select()
     })
+
+    if (!noteId) {
+      dispatch(push(`/${spaceId}/${notes[0].id}`))
+    }
+
   }
 
   render() {
-    const { match, notes, query } = this.props
+
+    const { match: { params: { noteId, spaceId } }, notes, query } = this.props
+
+    if (!noteId) return null
+
     return (
       <nav className="ListPane">
 
@@ -67,7 +80,7 @@ export default class ListPane extends Component {
               const text = convertFromRaw(JSON.parse(note.contentState)).getPlainText()
               return (
                 <li key={note.id}>
-                  <NavLink to={`${match.url}/${note.id}`}>
+                  <NavLink to={`/${spaceId}/${note.id}`}>
                     { text ? text.split("\n").slice(0, 2).map((line, index) => <p key={index}>{ index === 1 && line.length > 80 ? `${line.substr(0, 80)}...` : line }</p>) : <p>New note</p> }
                   </NavLink>
                 </li>
@@ -78,15 +91,28 @@ export default class ListPane extends Component {
 
       </nav>
     )
+
   }
 
   handleQueryKeyDown(event) {
-    if (event.key === "Escape") ipcRenderer.send("hide-window")
+    if (event.key === "Escape") return ipcRenderer.send("hide-window")
+    if (event.key === "ArrowDown") return this.selectNote(1)
+    if (event.key === "ArrowUp") return this.selectNote(-1)
   }
 
   handleQueryChange(event) {
     const { dispatch } = this.props
     dispatch(updateQuery(event.target.value))
+  }
+
+  selectNote(offset) {
+    const { dispatch, notes, match: { params: { spaceId, noteId } } } = this.props
+    if (noteId) {
+      const index = notes.findIndex(note => note.id === noteId)
+      if (notes[index + offset]) {
+        dispatch(push(`/${spaceId}/${notes[index + offset].id}`))
+      }
+    }
   }
 
 }

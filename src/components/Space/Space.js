@@ -2,7 +2,6 @@ import "./Space.less"
 
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-import { Route } from "react-router"
 
 import ListPane from "components/ListPane"
 import NotePane from "components/NotePane"
@@ -14,11 +13,11 @@ export default class Space extends Component {
   }
 
   render() {
-    const { match } = this.props
+    const { match: { params: { noteId } } } = this.props
     return (
       <div className="Space">
         <ListPane />
-        <Route path={`${match.url}/:noteId`} component={NotePane} />
+        { noteId && <NotePane /> }
       </div>
     )
   }
