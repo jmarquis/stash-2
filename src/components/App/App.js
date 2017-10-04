@@ -27,9 +27,12 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+
     const { dispatch, defaultSpaceId } = this.props
+
     bind("esc", () => ipcRenderer.send("hide-window"))
     bind("command+n", () => dispatch(createNote(defaultSpaceId)))
+    
   }
 
   render() {

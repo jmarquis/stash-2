@@ -60,7 +60,8 @@ app.on("ready", () => {
     frame: false,
     transparent: true,
     show: false,
-    hasShadow: false
+    hasShadow: false,
+    focusable: false
   })
 
   arrowWindow.loadURL("http://localhost:3000/arrow.html")
