@@ -6,7 +6,9 @@ import { Editor, EditorState, convertFromRaw } from "draft-js"
 import autobind from "autobind-decorator"
 import { connect } from "react-redux"
 import { withRouter } from "react-router"
+import { ipcRenderer } from "electron"
 
+import globalEmitter from "etc/globalEmitter"
 import { updateContentState } from "actions"
 
 @withRouter
@@ -27,6 +29,12 @@ export default class NotePane extends Component {
     editorState: EditorState.createWithContent(this.props.note.contentState ? convertFromRaw(JSON.parse(this.props.note.contentState)) : "")
   }
 
+  componentDidMount() {
+    globalEmitter.on("focus-editor", () => this.setState({
+      editorState: EditorState.moveFocusToEnd(this.state.editorState)
+    }))
+  }
+
   componentWillUpdate(nextProps) {
     if (nextProps.note.id !== this.props.note.id) {
       this.setState({
@@ -44,6 +52,7 @@ export default class NotePane extends Component {
           editorState={this.state.editorState}
           onChange={this.handleChange}
           ref={editor => this.editor = editor}
+          onKeyDown={this.handleKeyDown}
         />
       </section>
     )
@@ -57,8 +66,8 @@ export default class NotePane extends Component {
     }
   }
 
-  handleClick() {
-    this.editor.focus()
+  handleKeyDown(event) {
+    if (event.key === "Escape") return ipcRenderer.send("hide-window")
   }
 
 }

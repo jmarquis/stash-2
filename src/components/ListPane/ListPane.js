@@ -11,6 +11,7 @@ import autobind from "autobind-decorator"
 import moment from "moment"
 import { push } from "react-router-redux"
 
+import globalEmitter from "etc/globalEmitter"
 import { updateQuery } from "actions"
 
 @withRouter
@@ -95,9 +96,19 @@ export default class ListPane extends Component {
   }
 
   handleQueryKeyDown(event) {
-    if (event.key === "Escape") return ipcRenderer.send("hide-window")
-    if (event.key === "ArrowDown") return this.selectNote(1)
-    if (event.key === "ArrowUp") return this.selectNote(-1)
+    if (event.key === "Escape") {
+      event.preventDefault()
+      ipcRenderer.send("hide-window")
+    } else if (event.key === "ArrowDown") {
+      event.preventDefault()
+      this.selectNote(1)
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault()
+      this.selectNote(-1)
+    } else if (event.key === "Enter") {
+      event.preventDefault()
+      globalEmitter.emit("focus-editor")
+    }
   }
 
   handleQueryChange(event) {
