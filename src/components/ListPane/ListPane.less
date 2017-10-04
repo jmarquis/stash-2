@@ -8,6 +8,7 @@
     flex: none;
     padding: 12px 16px 0;
     display: flex;
+    position: relative;
 
     > input {
       flex: auto;
@@ -17,7 +18,7 @@
       background: transparent;
       height: 30px;
       font: 14px "open-sans", sans-serif;
-      padding: 0 8px 2px;
+      padding: 0 28px 2px 8px;
 
       &:hover {
         border-color: @aluminum;
@@ -26,6 +27,22 @@
       &:focus {
         background: @white;
         border-color: @azure;
+      }
+    }
+
+    > button {
+      appearance: none;
+      border: 0;
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      position: absolute;
+      top: 19px;
+      right: 25px;
+      color: @cumulus;
+
+      &:hover > svg {
+        color: @aluminum;
       }
     }
   }

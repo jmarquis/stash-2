@@ -11,6 +11,8 @@ import autobind from "autobind-decorator"
 import moment from "moment"
 import { push } from "react-router-redux"
 
+import ClearIcon from "assets/x"
+
 import globalEmitter from "etc/globalEmitter"
 import { updateQuery } from "actions"
 
@@ -85,6 +87,7 @@ export default class ListPane extends Component {
             onChange={this.handleQueryChange}
             value={query}
           />
+          { query && <button onClick={this.clearQuery}><ClearIcon /></button> }
         </header>
 
         <ul onKeyDown={this.handleQueryKeyDown} ref={list => this.list = list}>
@@ -126,6 +129,11 @@ export default class ListPane extends Component {
   handleQueryChange(event) {
     const { dispatch } = this.props
     dispatch(updateQuery(event.target.value))
+  }
+
+  clearQuery() {
+    const { dispatch } = this.props
+    dispatch(updateQuery(""))
   }
 
   selectNote(offset) {
