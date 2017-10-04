@@ -52,7 +52,7 @@ export default class NotePane extends Component {
           editorState={this.state.editorState}
           onChange={this.handleChange}
           ref={editor => this.editor = editor}
-          onKeyDown={this.handleKeyDown}
+          onEscape={this.handleEscape}
         />
       </section>
     )
@@ -66,8 +66,8 @@ export default class NotePane extends Component {
     }
   }
 
-  handleKeyDown(event) {
-    if (event.key === "Escape") return ipcRenderer.send("hide-window")
+  handleEscape() {
+    ipcRenderer.send("hide-window")
   }
 
 }
