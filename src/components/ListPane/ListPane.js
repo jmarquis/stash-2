@@ -93,7 +93,7 @@ export default class ListPane extends Component {
               const text = convertFromRaw(JSON.parse(note.contentState)).getPlainText()
               return (
                 <li key={note.id}>
-                  <NavLink to={`/${spaceId}/${note.id}`}>
+                  <NavLink to={`/${spaceId}/${note.id}`} tabIndex={-1}>
                     { text ? text.split("\n").slice(0, 2).map((line, index) => <p key={index}>{ index === 1 && line.length > 80 ? `${line.substr(0, 80)}...` : line }</p>) : <p>New note</p> }
                   </NavLink>
                 </li>

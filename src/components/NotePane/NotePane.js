@@ -2,7 +2,8 @@ import "./NotePane.less"
 
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-import { Editor, EditorState, convertFromRaw } from "draft-js"
+import { Editor, EditorState, convertFromRaw, getDefaultKeyBinding, KeyBindingUtil } from "draft-js"
+const { hasCommandModifier } = KeyBindingUtil
 import autobind from "autobind-decorator"
 import { connect } from "react-redux"
 import { withRouter } from "react-router"
@@ -53,6 +54,19 @@ export default class NotePane extends Component {
           onChange={this.handleChange}
           ref={editor => this.editor = editor}
           onEscape={this.handleEscape}
+          keyBindingFn={event => {
+            if (event.key === "f" && hasCommandModifier(event)) {
+              return "external:search"
+            }
+            return getDefaultKeyBinding(event)
+          }}
+          handleKeyCommand={command => {
+            if (command === "external:search") {
+              globalEmitter.emit("focus-search")
+              return "handled"
+            }
+            return "not-handled"
+          }}
         />
       </section>
     )
