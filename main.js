@@ -54,8 +54,8 @@ app.on("ready", () => {
   arrowWindow = new BrowserWindow({
     parent: mainWindow,
     title: "",
-    width: 320,
-    height: 160,
+    width: 32,
+    height: 16,
     resizable: false,
     frame: false,
     transparent: true,
