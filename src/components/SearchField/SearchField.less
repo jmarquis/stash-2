@@ -2,7 +2,7 @@
 
 .SearchField {
   position: relative;
-  border: 1px solid @cumulus;
+  border: 1px solid @nickel;
   border-radius: 3px;
   overflow: hidden;
   cursor: text;
@@ -10,10 +10,14 @@
 
   &:hover {
     border-color: @aluminum;
+
+    > svg {
+      color: @aluminum;
+    }
   }
 
   &.focused {
-    background: @white;
+    background-color: @white;
     border-color: @azure;
   }
 
@@ -24,11 +28,16 @@
     width: 16px;
     height: 16px;
     pointer-events: none;
-    color: @cumulus;
+    color: @nickel;
+    transform: translateX(80px);
+    transition: transform .2s ease;
+    will-change: transform;
   }
 
-  &.focused > svg {
+  &.focused > svg,
+  &:not(.empty) > svg {
     color: @aluminum;
+    transform: none;
   }
 
   > input {
@@ -39,6 +48,16 @@
     background: transparent;
     font: 14px "open-sans", sans-serif;
     padding: 0 32px 2px;
+    transform: translateX(80px);
+    transition: transform .2s ease, opacity .2s ease;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  &.focused > input,
+  &:not(.empty) > input {
+    transform: none;
+    opacity: 1;
   }
 
   > button {
@@ -50,7 +69,7 @@
     position: absolute;
     top: 11px;
     right: 11px;
-    color: @cumulus;
+    color: @nickel;
 
     &:hover > svg {
       color: @aluminum;

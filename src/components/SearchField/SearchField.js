@@ -14,7 +14,7 @@ import ClearIcon from "assets/x-circle"
 export default class SearchField extends Component {
 
   static propTypes = {
-    value: PropTypes.value,
+    value: PropTypes.string,
     onClear: PropTypes.func
   }
 
@@ -32,10 +32,10 @@ export default class SearchField extends Component {
   }
 
   render() {
-    const { value, ...otherProps } = this.props
+    const { value, onClear, ...otherProps } = this.props // eslint-disable-line no-unused-vars
     const { focused } = this.state
     return (
-      <div className={classNames("SearchField", { focused })} onClick={this.focus}>
+      <div className={classNames("SearchField", { focused }, { empty: !value })} onClick={this.focus}>
         <SearchIcon />
         <input
           type="text"
@@ -69,6 +69,7 @@ export default class SearchField extends Component {
 
   clearQuery() {
     this.props.onClear()
+    this.focus()
   }
 
 }
