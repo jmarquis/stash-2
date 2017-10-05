@@ -35,7 +35,7 @@ export default class SearchField extends Component {
     const { value, ...otherProps } = this.props
     const { focused } = this.state
     return (
-      <div className={classNames("SearchField", { focused })}>
+      <div className={classNames("SearchField", { focused })} onClick={this.focus}>
         <SearchIcon />
         <input
           type="text"
@@ -49,6 +49,10 @@ export default class SearchField extends Component {
         { value && <button onClick={this.clearQuery}><ClearIcon /></button> }
       </div>
     )
+  }
+
+  focus() {
+    this.searchField.focus()
   }
 
   handleFocus() {
