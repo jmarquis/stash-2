@@ -6,11 +6,13 @@ import { NavLink } from "react-router-dom"
 import { withRouter } from "react-router"
 import { connect } from "react-redux"
 import { push } from "react-router-redux"
+import autobind from "autobind-decorator"
 
 import globalEmitter from "etc/globalEmitter"
 
 @withRouter
 @connect()
+@autobind
 export default class List extends Component {
 
   static propTypes = {
@@ -21,29 +23,8 @@ export default class List extends Component {
   }
 
   componentDidMount() {
-
-    const { dispatch, items, match: { url } } = this.props
-
-    globalEmitter.on("select-next-note", () => {
-      const index = items.findIndex(item => item.url === url)
-      if (items[index + 1]) {
-        dispatch(push(items[index + 1].url))
-        setTimeout(() => {
-          this.list.querySelector(".active").scrollIntoViewIfNeeded()
-        }, 100)
-      }
-    })
-
-    globalEmitter.on("select-previous-note", () => {
-      const index = items.findIndex(item => item.url === url)
-      if (items[index - 1]) {
-        dispatch(push(items[index - 1].url))
-        setTimeout(() => {
-          this.list.querySelector(".active").scrollIntoViewIfNeeded()
-        }, 100)
-      }
-    })
-
+    globalEmitter.on("select-next-note", () => this.selectItem(1))
+    globalEmitter.on("select-previous-note", () => this.selectItem(-1))
   }
 
   render() {
@@ -67,6 +48,20 @@ export default class List extends Component {
         }
       </ul>
     )
+  }
+
+  selectItem(offset) {
+
+    const { dispatch, items, match: { url } } = this.props
+
+    const index = items.findIndex(item => item.url === url)
+    if (items[index + offset]) {
+      dispatch(push(items[index + offset].url))
+      setTimeout(() => {
+        this.list.querySelector(".active").scrollIntoViewIfNeeded()
+      }, 100)
+    }
+
   }
 
 }
