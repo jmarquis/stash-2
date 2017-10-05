@@ -49,6 +49,7 @@ export default class App extends Component {
       <div className="App">
         <Switch>
           <Route exact path="/" render={() => <Redirect to={`/${defaultSpaceId}`} />} />
+          <Route path="/:spaceId/new/:noteTitle" component={Space} />
           <Route path="/:spaceId/:noteId?" component={Space} />
         </Switch>
       </div>

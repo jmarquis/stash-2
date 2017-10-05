@@ -16,6 +16,8 @@ import { updateQuery } from "actions"
 
 import SearchField from "components/SearchField"
 
+import AddIcon from "assets/plus"
+
 @withRouter
 @connect((state, props) => {
   let { notes, query } = state
@@ -90,6 +92,18 @@ export default class ListPane extends Component {
               )
             })
           }
+          {(() => {
+            if (query) {
+              return (
+                <li key="new">
+                  <NavLink to={`/${spaceId}/new/${encodeURIComponent(query)}`} tabIndex={-1}>
+                    <AddIcon />
+                    {query}
+                  </NavLink>
+                </li>
+              )
+            }
+          })()}
         </ul>
 
       </nav>
