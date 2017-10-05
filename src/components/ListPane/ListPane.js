@@ -5,7 +5,6 @@ import PropTypes from "prop-types"
 import { ipcRenderer } from "electron"
 import { connect } from "react-redux"
 import { withRouter } from "react-router"
-import { NavLink } from "react-router-dom"
 import { convertFromRaw } from "draft-js"
 import autobind from "autobind-decorator"
 import moment from "moment"
@@ -15,6 +14,7 @@ import globalEmitter from "etc/globalEmitter"
 import { updateQuery } from "actions"
 
 import SearchField from "components/SearchField"
+import List from "components/List"
 
 import AddIcon from "assets/plus"
 
@@ -45,18 +45,15 @@ export default class ListPane extends Component {
   }
 
   componentDidMount() {
-
     const { dispatch, notes, match: { params: { spaceId, noteId } } } = this.props
-
     if (!noteId) {
       dispatch(push(`/${spaceId}/${notes[0].id}`))
     }
-
   }
 
   componentWillUpdate(nextProps) {
     const { dispatch, notes, query, match: { params: { spaceId, noteId, noteTitle } } } = nextProps
-    if (notes.length && !notes.find(note => note.id === noteId)) {
+    if (notes.length && !noteTitle && !notes.find(note => note.id === noteId)) {
       dispatch(push(`/${spaceId}/${notes[0].id}`))
     } else if (!notes.length) {
       if (query && noteTitle !== encodeURIComponent(query)) {
@@ -71,6 +68,41 @@ export default class ListPane extends Component {
 
     const { match: { params: { spaceId } }, notes, query } = this.props
 
+    const listItems = notes.map(note => {
+
+      let text = convertFromRaw(JSON.parse(note.contentState)).getPlainText()
+      if (text) {
+        text = text
+          .split("\n")
+          .slice(0, 2)
+          .map((line, index) =>
+            <p key={index}>
+              { index === 1 && line.length > 80 ? `${line.substr(0, 80)}...` : line }
+            </p>
+          )
+      } else {
+        text = <p>New note</p>
+      }
+
+      return {
+        id: note.id,
+        url: `/${spaceId}/${note.id}`,
+        content: text
+      }
+
+    })
+
+    if (query) {
+      listItems.push({
+        id: "new",
+        url: `/${spaceId}/new/${encodeURIComponent(query)}`,
+        content: [
+          <AddIcon key={0} />,
+          <p key={1}>{query}</p>
+        ]
+      })
+    }
+
     return (
       <nav className="ListPane">
 
@@ -83,32 +115,10 @@ export default class ListPane extends Component {
           />
         </header>
 
-        <ul onKeyDown={this.handleKeyDown} ref={list => this.list = list}>
-          {
-            notes.map(note => {
-              const text = convertFromRaw(JSON.parse(note.contentState)).getPlainText()
-              return (
-                <li key={note.id}>
-                  <NavLink to={`/${spaceId}/${note.id}`} tabIndex={-1}>
-                    { text ? text.split("\n").slice(0, 2).map((line, index) => <p key={index}>{ index === 1 && line.length > 80 ? `${line.substr(0, 80)}...` : line }</p>) : <p>New note</p> }
-                  </NavLink>
-                </li>
-              )
-            })
-          }
-          {(() => {
-            if (query) {
-              return (
-                <li key="new">
-                  <NavLink to={`/${spaceId}/new/${encodeURIComponent(query)}`} tabIndex={-1}>
-                    <AddIcon />
-                    {query}
-                  </NavLink>
-                </li>
-              )
-            }
-          })()}
-        </ul>
+        <List
+          items={listItems}
+          onKeyDown={this.handleKeyDown}
+        />
 
       </nav>
     )
@@ -126,10 +136,10 @@ export default class ListPane extends Component {
       ipcRenderer.send("hide-window")
     } else if (event.key === "ArrowDown") {
       event.preventDefault()
-      this.selectNote(1)
+      globalEmitter.emit("select-next-note")
     } else if (event.key === "ArrowUp") {
       event.preventDefault()
-      this.selectNote(-1)
+      globalEmitter.emit("select-previous-note")
     } else if (event.key === "Enter") {
       event.preventDefault()
       globalEmitter.emit("focus-editor")
@@ -139,19 +149,6 @@ export default class ListPane extends Component {
   clearQuery() {
     const { dispatch } = this.props
     dispatch(updateQuery(""))
-  }
-
-  selectNote(offset) {
-    const { dispatch, notes, match: { params: { spaceId, noteId } } } = this.props
-    if (noteId) {
-      const index = notes.findIndex(note => note.id === noteId)
-      if (notes[index + offset]) {
-        dispatch(push(`/${spaceId}/${notes[index + offset].id}`))
-        setTimeout(() => {
-          this.list.querySelector(".active").scrollIntoViewIfNeeded()
-        }, 100)
-      }
-    }
   }
 
 }
