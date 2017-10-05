@@ -37,6 +37,10 @@ export default class App extends Component {
 
     ipcRenderer.on("create-note", () => dispatch(createNote(defaultSpaceId))) // TODO: focus the new note
 
+    ipcRenderer.on("focus-search", () => {
+      globalEmitter.emit("focus-search")
+    })
+
   }
 
   render() {

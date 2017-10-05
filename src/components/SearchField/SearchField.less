@@ -1,0 +1,55 @@
+@import "~styles/colors";
+
+.SearchField {
+  position: relative;
+
+  > svg {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+    color: @cumulus;
+  }
+
+  &.focused > svg {
+    color: @aluminum;
+  }
+
+  > input {
+    width: 100%;
+    border: 1px solid @cumulus;
+    border-radius: 3px;
+    box-shadow: none;
+    background: transparent;
+    height: 40px;
+    font: 14px "open-sans", sans-serif;
+    padding: 0 28px 2px 32px;
+
+    &:hover {
+      border-color: @aluminum;
+    }
+
+    &:focus {
+      background: @white;
+      border-color: @azure;
+    }
+  }
+
+  > button {
+    appearance: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: @cumulus;
+
+    &:hover > svg {
+      color: @aluminum;
+    }
+  }
+}

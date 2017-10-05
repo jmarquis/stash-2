@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>Shape</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Menu-Bar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-Copy-5" transform="translate(-28.000000, -24.000000)" fill-rule="nonzero" fill="currentColor">
+            <path d="M43.8726667,38.4306667 L39.736,34.294 C40.514,33.224 40.974,31.908 40.974,30.4866667 C40.974,26.91 38.064,24 34.4866667,24 C30.91,24 28,26.91 28,30.4866667 C28,34.064 30.91,36.9733333 34.4866667,36.9733333 C35.8426667,36.9733333 37.102,36.5553333 38.1446667,35.8413333 L42.3033333,40 L43.8726667,38.4306667 L43.8726667,38.4306667 Z M29.9026667,30.4866667 C29.9026667,27.9586667 31.9593333,25.902 34.4873333,25.902 C37.0153333,25.902 39.072,27.9586667 39.072,30.4866667 C39.072,33.0146667 37.0153333,35.0713333 34.4873333,35.0713333 C31.9586667,35.0713333 29.9026667,33.0146667 29.9026667,30.4866667 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

@@ -11,10 +11,10 @@ import autobind from "autobind-decorator"
 import moment from "moment"
 import { push } from "react-router-redux"
 
-import ClearIcon from "assets/x"
-
 import globalEmitter from "etc/globalEmitter"
 import { updateQuery } from "actions"
+
+import SearchField from "components/SearchField"
 
 @withRouter
 @connect((state, props) => {
@@ -46,16 +46,6 @@ export default class ListPane extends Component {
 
     const { dispatch, notes, match: { params: { spaceId, noteId } } } = this.props
 
-    ipcRenderer.on("focus-search", () => {
-      this.searchField.focus()
-      this.searchField.select()
-    })
-
-    globalEmitter.on("focus-search", () => {
-      this.searchField.focus()
-      this.searchField.select()
-    })
-
     if (!noteId) {
       dispatch(push(`/${spaceId}/${notes[0].id}`))
     }
@@ -79,18 +69,15 @@ export default class ListPane extends Component {
       <nav className="ListPane">
 
         <header>
-          <input
-            type="text"
-            placeholder="Search or add"
-            ref={searchField => this.searchField = searchField}
-            onKeyDown={this.handleQueryKeyDown}
-            onChange={this.handleQueryChange}
+          <SearchField
             value={query}
+            onChange={this.handleQueryChange}
+            onKeyDown={this.handleKeyDown}
+            onClear={this.clearQuery}
           />
-          { query && <button onClick={this.clearQuery}><ClearIcon /></button> }
         </header>
 
-        <ul onKeyDown={this.handleQueryKeyDown} ref={list => this.list = list}>
+        <ul onKeyDown={this.handleKeyDown} ref={list => this.list = list}>
           {
             notes.map(note => {
               const text = convertFromRaw(JSON.parse(note.contentState)).getPlainText()
@@ -110,7 +97,12 @@ export default class ListPane extends Component {
 
   }
 
-  handleQueryKeyDown(event) {
+  handleQueryChange(event) {
+    const { dispatch } = this.props
+    dispatch(updateQuery(event.target.value))
+  }
+
+  handleKeyDown(event) {
     if (event.key === "Escape") {
       event.preventDefault()
       ipcRenderer.send("hide-window")
@@ -124,11 +116,6 @@ export default class ListPane extends Component {
       event.preventDefault()
       globalEmitter.emit("focus-editor")
     }
-  }
-
-  handleQueryChange(event) {
-    const { dispatch } = this.props
-    dispatch(updateQuery(event.target.value))
   }
 
   clearQuery() {
