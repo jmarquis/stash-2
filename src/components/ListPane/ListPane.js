@@ -55,11 +55,15 @@ export default class ListPane extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    const { dispatch, notes, match: { params: { spaceId, noteId } } } = nextProps
+    const { dispatch, notes, query, match: { params: { spaceId, noteId, noteTitle } } } = nextProps
     if (notes.length && !notes.find(note => note.id === noteId)) {
       dispatch(push(`/${spaceId}/${notes[0].id}`))
-    } else if (!notes.length && noteId) {
-      dispatch(push(`/${spaceId}`))
+    } else if (!notes.length) {
+      if (query && noteTitle !== encodeURIComponent(query)) {
+        dispatch(push(`/${spaceId}/new/${encodeURIComponent(query)}`))
+      } else if (noteId) {
+        dispatch(push(`/${spaceId}`))
+      }
     }
   }
 
