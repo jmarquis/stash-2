@@ -47,7 +47,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { items, onKeyDown } = this.props // eslint-disable-line no-unused-vars
+    const { items, onKeyDown } = this.props
     return (
       <ul
         className="List"
