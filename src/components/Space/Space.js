@@ -17,22 +17,9 @@ export default class Space extends Component {
     return (
       <div className="Space">
         <ListPane />
-        { noteId && <NotePane /> }
+        <NotePane />
       </div>
     )
   }
 
 }
-
-
-
-// TODO: fix backspace/selection state weirdness
-// TODO: fix app only showing up on one desktop
-// TODO: sort notes by most frequently modified
-// TODO: support creating a note from the search box
-// TODO: keyboard bindings for navigating list & focusing note
-// TODO: figure out window styling
-// TODO: figure out list pane preview truncate length or something
-// TODO: deleting a note? trash view?
-//
-// LATER: firebase

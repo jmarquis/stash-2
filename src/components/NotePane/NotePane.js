@@ -26,8 +26,18 @@ export default class NotePane extends Component {
     note: PropTypes.object
   }
 
-  state = {
-    editorState: EditorState.createWithContent(this.props.note.contentState ? convertFromRaw(JSON.parse(this.props.note.contentState)) : "")
+  constructor(props) {
+    super(props)
+
+    if (props.note.id) {
+      this.state = {
+        editorState: EditorState.createWithContent(this.props.note.contentState ? convertFromRaw(JSON.parse(this.props.note.contentState)) : "")
+      }
+    } else {
+      this.state = {
+        editorState: EditorState.createEmpty()
+      }
+    }
   }
 
   componentDidMount() {
@@ -38,15 +48,21 @@ export default class NotePane extends Component {
 
   componentWillUpdate(nextProps) {
     if (nextProps.note.id !== this.props.note.id) {
-      this.setState({
-        editorState: EditorState.createWithContent(nextProps.note.contentState ? convertFromRaw(JSON.parse(nextProps.note.contentState)) : "")
-      })
+      if (nextProps.note.id) {
+        this.setState({
+          editorState: EditorState.createWithContent(nextProps.note.contentState ? convertFromRaw(JSON.parse(nextProps.note.contentState)) : "")
+        })
+      } else {
+        this.setState({
+          editorState: EditorState.createEmpty()
+        })
+      }
     }
   }
 
   render() {
     const { note } = this.props
-    if (!note) return null
+    if (!note) return <section className="NotePane" />
     return (
       <section className="NotePane" onClick={this.handleClick}>
         <Editor

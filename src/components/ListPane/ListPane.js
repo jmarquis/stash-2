@@ -56,14 +56,14 @@ export default class ListPane extends Component {
     const { dispatch, notes, match: { params: { spaceId, noteId } } } = nextProps
     if (notes.length && !notes.find(note => note.id === noteId)) {
       dispatch(push(`/${spaceId}/${notes[0].id}`))
+    } else if (!notes.length && noteId) {
+      dispatch(push(`/${spaceId}`))
     }
   }
 
   render() {
 
-    const { match: { params: { noteId, spaceId } }, notes, query } = this.props
-
-    if (!noteId) return null
+    const { match: { params: { spaceId } }, notes, query } = this.props
 
     return (
       <nav className="ListPane">
