@@ -19,7 +19,8 @@ export default class List extends Component {
     dispatch: PropTypes.func,
     items: PropTypes.array,
     match: PropTypes.object,
-    onKeyDown: PropTypes.func
+    onKeyDown: PropTypes.func,
+    onClick: PropTypes.func
   }
 
   componentDidMount() {
@@ -28,7 +29,7 @@ export default class List extends Component {
   }
 
   render() {
-    const { items, onKeyDown } = this.props
+    const { items, onKeyDown, onClick } = this.props
     return (
       <ul
         className="List"
@@ -39,7 +40,7 @@ export default class List extends Component {
           items.map(item => {
             return (
               <li key={item.id} className={item.className}>
-                <NavLink to={item.url} tabIndex={-1}>
+                <NavLink to={item.url} tabIndex={-1} onClick={item.onClick}>
                   { item.content }
                 </NavLink>
               </li>

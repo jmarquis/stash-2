@@ -63,7 +63,7 @@ export default class ListPane extends Component {
 
   render() {
 
-    const { match: { params: { spaceId } }, notes, query } = this.props
+    const { match: { params: { spaceId, newNoteTitle } }, notes, query } = this.props
 
     const listItems = notes.map(note => {
 
@@ -97,7 +97,11 @@ export default class ListPane extends Component {
           <AddIcon key={0} />,
           <p key={1}>{query}</p>
         ],
-        className: "new"
+        className: "new",
+        onClick: event => {
+          event.preventDefault()
+          globalEmitter.emit("create-note", Base64.decode(newNoteTitle))
+        }
       })
     }
 
