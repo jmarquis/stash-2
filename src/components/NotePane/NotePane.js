@@ -77,28 +77,33 @@ export default class NotePane extends Component {
 
   render() {
     const { note } = this.props
-    if (!note) return <section className="NotePane" />
     return (
-      <section className="NotePane" onClick={this.handleClick} ref={pane => this.pane = pane}>
-        <Editor
-          editorState={this.state.editorState}
-          onChange={this.handleChange}
-          ref={editor => this.editor = editor}
-          onEscape={this.handleEscape}
-          keyBindingFn={event => {
-            if (event.key === "f" && hasCommandModifier(event)) {
-              return "external:search"
-            }
-            return getDefaultKeyBinding(event)
-          }}
-          handleKeyCommand={command => {
-            if (command === "external:search") {
-              globalEmitter.emit("focus-search")
-              return "handled"
-            }
-            return "not-handled"
-          }}
-        />
+      <section className="NotePane" ref={pane => this.pane = pane}>
+        {(() => {
+          if (note && note.id) {
+            return (
+              <Editor
+                editorState={this.state.editorState}
+                onChange={this.handleChange}
+                ref={editor => this.editor = editor}
+                onEscape={this.handleEscape}
+                keyBindingFn={event => {
+                  if (event.key === "f" && hasCommandModifier(event)) {
+                    return "external:search"
+                  }
+                  return getDefaultKeyBinding(event)
+                }}
+                handleKeyCommand={command => {
+                  if (command === "external:search") {
+                    globalEmitter.emit("focus-search")
+                    return "handled"
+                  }
+                  return "not-handled"
+                }}
+              />
+            )
+          }
+        })()}
       </section>
     )
   }

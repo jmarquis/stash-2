@@ -8,6 +8,18 @@
   position: relative;
   mask-image: linear-gradient(transparent, #000 5%, #000 95%, transparent);
 
+  &.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &::before {
+      content: "No notes";
+      color: @nickel;
+      font-weight: 600;
+    }
+  }
+
   > li {
     margin: 0;
 

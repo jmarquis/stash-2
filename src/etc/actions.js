@@ -45,3 +45,10 @@ export function createNote(spaceId, noteId = uuid(), text) {
   localData.set(`notes.${noteId}`, noteData)
   return updateNote(noteId, noteData)
 }
+
+export function updateFilter(filter) {
+  return {
+    type: "UPDATE_FILTER",
+    filter
+  }
+}

@@ -7,6 +7,7 @@ import { withRouter } from "react-router"
 import { connect } from "react-redux"
 import { push } from "react-router-redux"
 import autobind from "autobind-decorator"
+import classNames from "classnames"
 
 import globalEmitter from "etc/globalEmitter"
 
@@ -20,7 +21,6 @@ export default class List extends Component {
     items: PropTypes.array,
     match: PropTypes.object,
     onKeyDown: PropTypes.func,
-    onClick: PropTypes.func
   }
 
   componentDidMount() {
@@ -29,10 +29,10 @@ export default class List extends Component {
   }
 
   render() {
-    const { items, onKeyDown, onClick } = this.props
+    const { items, onKeyDown } = this.props
     return (
       <ul
-        className="List"
+        className={classNames("List", { empty: !items.length })}
         ref={list => this.list = list}
         onKeyDown={onKeyDown}
       >

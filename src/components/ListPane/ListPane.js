@@ -12,7 +12,7 @@ import { push } from "react-router-redux"
 import { Base64 } from "js-base64"
 
 import globalEmitter from "etc/globalEmitter"
-import { updateQuery } from "etc/actions"
+import { updateQuery, updateFilter } from "etc/actions"
 
 import SearchField from "components/SearchField"
 import List from "components/List"
@@ -21,10 +21,11 @@ import AddIcon from "assets/plus"
 
 @withRouter
 @connect((state, props) => {
-  let { notes, query } = state
+  let { notes, query, filter } = state
   const { match: { params: { spaceId } } } = props
   notes = Object.keys(notes)
     .filter(noteId => notes[noteId].spaceId === spaceId && convertFromRaw(JSON.parse(notes[noteId].contentState)).getPlainText().toLowerCase().includes(query.toLowerCase()))
+    .filter(noteId => filter === "deleted" ? notes[noteId].deleted : !notes[noteId].deleted)
     .map(noteId => ({ id: noteId, ...notes[noteId] }))
     .sort((noteA, noteB) => {
       const noteALastModified = moment(noteA.lastModified)
@@ -33,7 +34,7 @@ import AddIcon from "assets/plus"
       else if (noteALastModified.isBefore(noteBLastModified)) return 1
       else return 0
     })
-  return { notes, query }
+  return { notes, query, filter }
 })
 @autobind
 export default class ListPane extends Component {
@@ -42,7 +43,8 @@ export default class ListPane extends Component {
     dispatch: PropTypes.func,
     notes: PropTypes.object,
     match: PropTypes.object,
-    query: PropTypes.string
+    query: PropTypes.string,
+    filter: PropTypes.string
   }
 
   componentDidMount() {
@@ -52,18 +54,22 @@ export default class ListPane extends Component {
     }
   }
 
-  componentWillUpdate(nextProps) {
-    const { dispatch, notes, query, match: { url, params: { spaceId, noteId, newNoteTitle } } } = nextProps
-    if (notes.length && !newNoteTitle && !notes.find(note => note.id === noteId)) {
+  componentDidUpdate() {
+    const { dispatch, notes, query, match: { url, params: { spaceId, noteId } } } = this.props
+    if (notes.length && !query && !notes.find(note => note.id === noteId)) {
       dispatch(push(`/${spaceId}/${notes[0].id}`))
-    } else if (!notes.length && url !== `/${spaceId}/new/${Base64.encodeURI(query)}`) {
-      dispatch(push(`/${spaceId}/new/${Base64.encodeURI(query)}`))
+    } else if (!notes.length) {
+      if (query && url !== `/${spaceId}/new/${Base64.encodeURI(query)}`) {
+        dispatch(push(`/${spaceId}/new/${Base64.encodeURI(query)}`))
+      } else if (!query && url !== `/${spaceId}`) {
+        dispatch(push(`/${spaceId}`))
+      }
     }
   }
 
   render() {
 
-    const { match: { params: { spaceId, newNoteTitle } }, notes, query } = this.props
+    const { match: { params: { spaceId } }, notes, query, filter } = this.props
 
     const listItems = notes.map(note => {
 
@@ -89,7 +95,7 @@ export default class ListPane extends Component {
 
     })
 
-    if (query) {
+    if (filter === "all" && query) {
       listItems.push({
         id: "new",
         url: `/${spaceId}/new/${Base64.encodeURI(query)}`,
@@ -100,7 +106,7 @@ export default class ListPane extends Component {
         className: "new",
         onClick: event => {
           event.preventDefault()
-          globalEmitter.emit("create-note", Base64.decode(newNoteTitle))
+          globalEmitter.emit("create-note", query)
         }
       })
     }
@@ -121,6 +127,13 @@ export default class ListPane extends Component {
           items={listItems}
           onKeyDown={this.handleKeyDown}
         />
+
+        <footer>
+          <select value={filter} onChange={this.handleFilterChange}>
+            <option value="all">All notes</option>
+            <option value="deleted">Deleted notes</option>
+          </select>
+        </footer>
 
       </nav>
     )
@@ -156,6 +169,11 @@ export default class ListPane extends Component {
   clearQuery() {
     const { dispatch } = this.props
     dispatch(updateQuery(""))
+  }
+
+  handleFilterChange(event) {
+    const { dispatch } = this.props
+    dispatch(updateFilter(event.target.value))
   }
 
 }
