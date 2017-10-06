@@ -41,14 +41,29 @@ export default class NotePane extends Component {
   }
 
   componentDidMount() {
-    globalEmitter.on("focus-editor", () => this.setState({
-      editorState: EditorState.moveFocusToEnd(this.state.editorState)
-    }))
+    globalEmitter.on("focus-editor", () => {
+      this.setState({
+        editorState: EditorState.moveFocusToEnd(this.state.editorState)
+      }, () => {
+        const selection = window.getSelection()
+        if (selection.rangeCount !== 0) {
+          let node = selection.getRangeAt(0).startContainer
+          do {
+            if (node.nodeType === 1 && node.scrollIntoViewIfNeeded) {
+              node.scrollIntoViewIfNeeded(true)
+              break
+            }
+            node = node.parentNode
+          } while (node)
+        }
+      })
+    })
   }
 
   componentWillUpdate(nextProps) {
     if (nextProps.note.id !== this.props.note.id) {
       if (nextProps.note.id) {
+        this.pane.scrollTop = 0
         this.setState({
           editorState: EditorState.createWithContent(nextProps.note.contentState ? convertFromRaw(JSON.parse(nextProps.note.contentState)) : "")
         })
@@ -64,7 +79,7 @@ export default class NotePane extends Component {
     const { note } = this.props
     if (!note) return <section className="NotePane" />
     return (
-      <section className="NotePane" onClick={this.handleClick}>
+      <section className="NotePane" onClick={this.handleClick} ref={pane => this.pane = pane}>
         <Editor
           editorState={this.state.editorState}
           onChange={this.handleChange}

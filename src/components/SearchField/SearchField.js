@@ -46,7 +46,7 @@ export default class SearchField extends Component {
           onBlur={this.handleBlur}
           {...otherProps}
         />
-        { value && <button onClick={this.clearQuery}><ClearIcon /></button> }
+        { value && <button onClick={this.clearQuery} tabIndex={-1}><ClearIcon /></button> }
       </div>
     )
   }
