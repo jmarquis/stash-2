@@ -9,6 +9,7 @@ import { convertFromRaw } from "draft-js"
 import autobind from "autobind-decorator"
 import moment from "moment"
 import { push } from "react-router-redux"
+import { Base64 } from "js-base64"
 
 import globalEmitter from "etc/globalEmitter"
 import { updateQuery } from "etc/actions"
@@ -55,8 +56,8 @@ export default class ListPane extends Component {
     const { dispatch, notes, query, match: { url, params: { spaceId, noteId, newNoteTitle } } } = nextProps
     if (notes.length && !newNoteTitle && !notes.find(note => note.id === noteId)) {
       dispatch(push(`/${spaceId}/${notes[0].id}`))
-    } else if (!notes.length && url !== `/${spaceId}/new/${encodeURIComponent(query)}`) {
-      dispatch(push(`/${spaceId}/new/${encodeURIComponent(query)}`))
+    } else if (!notes.length && url !== `/${spaceId}/new/${Base64.encodeURI(query)}`) {
+      dispatch(push(`/${spaceId}/new/${Base64.encodeURI(query)}`))
     }
   }
 
@@ -91,7 +92,7 @@ export default class ListPane extends Component {
     if (query) {
       listItems.push({
         id: "new",
-        url: `/${spaceId}/new/${encodeURIComponent(query)}`,
+        url: `/${spaceId}/new/${Base64.encodeURI(query)}`,
         content: [
           <AddIcon key={0} />,
           <p key={1}>{query}</p>
@@ -141,7 +142,7 @@ export default class ListPane extends Component {
     } else if (event.key === "Enter") {
       event.preventDefault()
       if (newNoteTitle) {
-        globalEmitter.emit("create-note", newNoteTitle)
+        globalEmitter.emit("create-note", Base64.decode(newNoteTitle))
       } else {
         globalEmitter.emit("focus-editor")
       }
