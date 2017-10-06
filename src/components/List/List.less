@@ -41,5 +41,31 @@
         }
       }
     }
+
+    &.new > a {
+      display: flex;
+      align-items: center;
+      color: @aluminum;
+
+      &:hover {
+        color: @manatee;
+      }
+
+      > svg {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+      }
+
+      > p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.3;
+        font-weight: 600;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
   }
 }
