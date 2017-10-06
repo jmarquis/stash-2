@@ -16,6 +16,7 @@ import { updateQuery, updateFilter } from "etc/actions"
 
 import SearchField from "components/SearchField"
 import List from "components/List"
+import FilterSelect from "components/FilterSelect"
 
 import AddIcon from "assets/plus"
 
@@ -129,10 +130,7 @@ export default class ListPane extends Component {
         />
 
         <footer>
-          <select value={filter} onChange={this.handleFilterChange}>
-            <option value="all">All notes</option>
-            <option value="deleted">Deleted notes</option>
-          </select>
+          <FilterSelect filter={filter} onChange={this.handleFilterChange} />
         </footer>
 
       </nav>
