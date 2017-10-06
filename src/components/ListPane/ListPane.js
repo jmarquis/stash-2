@@ -11,7 +11,7 @@ import moment from "moment"
 import { push } from "react-router-redux"
 
 import globalEmitter from "etc/globalEmitter"
-import { updateQuery } from "actions"
+import { updateQuery } from "etc/actions"
 
 import SearchField from "components/SearchField"
 import List from "components/List"
@@ -52,11 +52,11 @@ export default class ListPane extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    const { dispatch, notes, match: { url, params: { spaceId, noteId } } } = nextProps
-    if (notes.length && !notes.find(note => note.id === noteId)) {
+    const { dispatch, notes, query, match: { url, params: { spaceId, noteId, newNoteTitle } } } = nextProps
+    if (notes.length && !newNoteTitle && !notes.find(note => note.id === noteId)) {
       dispatch(push(`/${spaceId}/${notes[0].id}`))
-    } else if (!notes.length && url !== `/${spaceId}`) {
-      dispatch(push(`/${spaceId}`))
+    } else if (!notes.length && url !== `/${spaceId}/new/${encodeURIComponent(query)}`) {
+      dispatch(push(`/${spaceId}/new/${encodeURIComponent(query)}`))
     }
   }
 
@@ -95,7 +95,8 @@ export default class ListPane extends Component {
         content: [
           <AddIcon key={0} />,
           <p key={1}>{query}</p>
-        ]
+        ],
+        className: "new"
       })
     }
 
@@ -127,18 +128,23 @@ export default class ListPane extends Component {
   }
 
   handleKeyDown(event) {
+    const { match: { params: { newNoteTitle } } } = this.props
     if (event.key === "Escape") {
       event.preventDefault()
       ipcRenderer.send("hide-window")
     } else if (event.key === "ArrowDown") {
       event.preventDefault()
-      globalEmitter.emit("select-next-note")
+      globalEmitter.emit("select-next-item")
     } else if (event.key === "ArrowUp") {
       event.preventDefault()
-      globalEmitter.emit("select-previous-note")
+      globalEmitter.emit("select-previous-item")
     } else if (event.key === "Enter") {
       event.preventDefault()
-      globalEmitter.emit("focus-editor")
+      if (newNoteTitle) {
+        globalEmitter.emit("create-note", newNoteTitle)
+      } else {
+        globalEmitter.emit("focus-editor")
+      }
     }
   }
 

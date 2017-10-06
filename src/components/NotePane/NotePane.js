@@ -10,7 +10,7 @@ import { withRouter } from "react-router"
 import { ipcRenderer } from "electron"
 
 import globalEmitter from "etc/globalEmitter"
-import { updateContentState } from "actions"
+import { updateContentState } from "etc/actions"
 
 @withRouter
 @connect((state, props) => {

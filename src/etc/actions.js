@@ -36,12 +36,11 @@ export function updateQuery(query) {
   }
 }
 
-export function createNote(spaceId) {
-  const noteId = uuid()
+export function createNote(spaceId, noteId = uuid(), text) {
   const noteData = {
     spaceId,
     lastModified: moment(),
-    contentState: JSON.stringify(convertToRaw(ContentState.createFromText("")))
+    contentState: JSON.stringify(convertToRaw(ContentState.createFromText(text || "")))
   }
   localData.set(`notes.${noteId}`, noteData)
   return updateNote(noteId, noteData)

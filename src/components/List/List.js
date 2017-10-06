@@ -23,8 +23,8 @@ export default class List extends Component {
   }
 
   componentDidMount() {
-    globalEmitter.on("select-next-note", () => this.selectItem(1))
-    globalEmitter.on("select-previous-note", () => this.selectItem(-1))
+    globalEmitter.on("select-next-item", () => this.selectItem(1))
+    globalEmitter.on("select-previous-item", () => this.selectItem(-1))
   }
 
   render() {
@@ -38,7 +38,7 @@ export default class List extends Component {
         {
           items.map(item => {
             return (
-              <li key={item.id}>
+              <li key={item.id} className={item.className}>
                 <NavLink to={item.url} tabIndex={-1}>
                   { item.content }
                 </NavLink>

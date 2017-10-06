@@ -13,7 +13,6 @@ export default class Space extends Component {
   }
 
   render() {
-    const { match: { params: { noteId } } } = this.props
     return (
       <div className="Space">
         <ListPane />
