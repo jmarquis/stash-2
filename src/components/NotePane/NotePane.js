@@ -50,7 +50,7 @@ export default class NotePane extends Component {
           let node = selection.getRangeAt(0).startContainer
           do {
             if (node.nodeType === 1 && node.scrollIntoViewIfNeeded) {
-              node.scrollIntoViewIfNeeded(true)
+              node.scrollIntoViewIfNeeded(false)
               break
             }
             node = node.parentNode

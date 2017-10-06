@@ -59,7 +59,7 @@ export default class List extends Component {
     if (items[index + offset]) {
       dispatch(push(items[index + offset].url))
       setTimeout(() => {
-        this.list.querySelector(".active").scrollIntoViewIfNeeded()
+        this.list.querySelector(".active").scrollIntoViewIfNeeded(false)
       }, 100)
     }
 
