@@ -14,6 +14,7 @@ import globalEmitter from "etc/globalEmitter"
 import { updateContentState, toggleNoteDeleted } from "etc/actions"
 
 import DeleteIcon from "assets/trash"
+import RestoreIcon from "assets/counterclockwise-arrow"
 
 @withRouter
 @connect((state, props) => {
@@ -109,6 +110,7 @@ export default class NotePane extends Component {
 
               <button key={2} onClick={this.handleDeleteClick} title={ note.deleted ? "Restore this note" : "Delete this note" }>
                 <DeleteIcon />
+                <RestoreIcon />
               </button>
 
             ]

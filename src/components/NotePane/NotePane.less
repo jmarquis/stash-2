@@ -57,10 +57,26 @@
       width: 16px;
       height: 16px;
       flex: none;
+
+      &:nth-child(2) {
+        display: none;
+      }
     }
   }
 
   &.note-deleted > button {
     color: @strawberry;
+
+    &:hover {
+      color: @azure;
+
+      > svg:first-child {
+        display: none;
+      }
+
+      > svg:nth-child(2) {
+        display: block;
+      }
+    }
   }
 }
