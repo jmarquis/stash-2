@@ -8,9 +8,12 @@ import autobind from "autobind-decorator"
 import { connect } from "react-redux"
 import { withRouter } from "react-router"
 import { ipcRenderer } from "electron"
+import classNames from "classnames"
 
 import globalEmitter from "etc/globalEmitter"
-import { updateContentState } from "etc/actions"
+import { updateContentState, toggleNoteDeleted } from "etc/actions"
+
+import DeleteIcon from "assets/trash"
 
 @withRouter
 @connect((state, props) => {
@@ -78,11 +81,13 @@ export default class NotePane extends Component {
   render() {
     const { note } = this.props
     return (
-      <section className="NotePane" ref={pane => this.pane = pane}>
+      <section className={classNames("NotePane", { "note-deleted": note.deleted })} ref={pane => this.pane = pane}>
         {(() => {
           if (note && note.id) {
-            return (
+            return [
+
               <Editor
+                key={1}
                 editorState={this.state.editorState}
                 onChange={this.handleChange}
                 ref={editor => this.editor = editor}
@@ -100,8 +105,13 @@ export default class NotePane extends Component {
                   }
                   return "not-handled"
                 }}
-              />
-            )
+              />,
+
+              <button key={2} onClick={this.handleDeleteClick} title={ note.deleted ? "Restore this note" : "Delete this note" }>
+                <DeleteIcon />
+              </button>
+
+            ]
           }
         })()}
       </section>
@@ -118,6 +128,11 @@ export default class NotePane extends Component {
 
   handleEscape() {
     ipcRenderer.send("hide-window")
+  }
+
+  handleDeleteClick() {
+    const { dispatch, note } = this.props
+    dispatch(toggleNoteDeleted(note.id, !note.deleted))
   }
 
 }

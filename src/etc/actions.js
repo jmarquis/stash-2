@@ -52,3 +52,8 @@ export function updateFilter(filter) {
     filter
   }
 }
+
+export function toggleNoteDeleted(noteId, deleted) {
+  localData.set(`notes.${noteId}.deleted`, deleted)
+  return updateNote(noteId, { deleted })
+}

@@ -3,6 +3,7 @@
 .NotePane {
   overflow-y: auto;
   background-color: @white;
+  position: relative;
 
   > .DraftEditor-root {
     width: 100%;
@@ -31,5 +32,35 @@
         }
       }
     }
+  }
+
+  > button {
+    appearance: none;
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    right: 14px;
+    bottom: 14px;
+    color: @nickel;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+
+    &:hover {
+      color: @manatee;
+    }
+
+    > svg {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+  }
+
+  &.note-deleted > button {
+    color: @strawberry;
   }
 }
