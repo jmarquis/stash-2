@@ -1,4 +1,5 @@
 const path = require("path")
+const CopyWebpackPlugin = require("copy-webpack-plugin")
 
 const pkg = require("./package.json")
 const src = path.join(__dirname, "src")
@@ -112,6 +113,15 @@ module.exports = {
     path: path.join(__dirname, "build"),
     publicPath: "http://localhost:3000/",
     filename: `${pkg.name}.js`
-  }
+  },
+
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: "src/static",
+        to: "static"
+      }
+    ])
+  ]
 
 }
