@@ -81,7 +81,7 @@ export default class ListPane extends Component {
           .slice(0, 2)
           .map((line, index) =>
             <p key={index}>
-              { index === 1 && line.length > 80 ? `${line.substr(0, 80)}...` : line }
+              {line}
             </p>
           )
       } else {
