@@ -52,7 +52,7 @@
     "less": "^3.0.1",
     "less-loader": "^4.0.5",
     "postcss-loader": "^2.0.6",
-    "react-hot-loader": "^3.0.0-beta.7",
+    "react-hot-loader": "^4.0.0",
     "react-svg-loader": "*",
     "style-loader": "*",
     "webpack": "^3.6.0",

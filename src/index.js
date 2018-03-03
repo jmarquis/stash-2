@@ -2,7 +2,6 @@ import "styles/base"
 
 import React from "react"
 import { render } from "react-dom"
-import { AppContainer } from "react-hot-loader"
 import { Provider } from "react-redux"
 import { createStore, combineReducers, applyMiddleware } from "redux"
 import thunk from "redux-thunk"
@@ -40,22 +39,11 @@ const store = createStore(
   applyMiddleware(...middleware)
 )
 
-const renderApp = AppComponent => render(
-  <AppContainer>
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <AppComponent user="whatever" />
-      </ConnectedRouter>
-    </Provider>
-  </AppContainer>,
+render(
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <App user="whatever" />
+    </ConnectedRouter>
+  </Provider>,
   document.getElementById("root")
 )
-
-renderApp(App)
-
-if (module.hot) {
-  module.hot.accept("./components/App", () => {
-    const NewApp = require("./components/App").default
-    renderApp(NewApp)
-  })
-}

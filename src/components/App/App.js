@@ -2,6 +2,7 @@ import "./App.less"
 
 import React, { Component } from "react"
 import PropTypes from "prop-types"
+import { hot } from "react-hot-loader"
 import { ipcRenderer } from "electron"
 import { bind } from "mousetrap"
 import { Route, Switch, Redirect } from "react-router-dom"
@@ -22,7 +23,7 @@ import Space from "components/Space"
   const defaultSpaceId = Object.keys(spaces)[0]
   return { location, defaultSpaceId }
 })
-export default class App extends Component {
+export default hot(module)(class App extends Component {
 
   static propTypes = {
     dispatch: PropTypes.func,
@@ -68,4 +69,4 @@ export default class App extends Component {
     )
   }
 
-}
+})
