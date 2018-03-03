@@ -6,7 +6,16 @@ const src = path.join(__dirname, "src")
 
 module.exports = {
 
-  devtool: "source-map",
+  mode: "development",
+
+  devServer: {
+    stats: {
+      children: false,
+      cached: false,
+      cachedAssets: false,
+      modules: false
+    }
+  },
 
   target: "electron-renderer",
 

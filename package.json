@@ -55,7 +55,8 @@
     "react-hot-loader": "^4.0.0",
     "react-svg-loader": "*",
     "style-loader": "*",
-    "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.9.1"
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.10",
+    "webpack-dev-server": "^3.1.0"
   }
 }
